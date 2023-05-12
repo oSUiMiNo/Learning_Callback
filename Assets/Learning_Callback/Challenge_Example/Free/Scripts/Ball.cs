@@ -5,6 +5,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     float speed = 15;
+    bool isMoving = false;
     Rigidbody rb;
 
 
@@ -13,12 +14,15 @@ public class Ball : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
 
         GameManager.OnInit += () => transform.position = new Vector3(0, 1.4f, -6.5f);
+        GameManager.OnInit += () => isMoving = false;
         GameManager.OnBlocksLost += () => rb.velocity = Vector3.zero;
         
         InputCallbacks.OnKeyDown_Space += () =>
         {
-            if (GameManager.gameSet || !GameManager.Initialized) return;
+            if (isMoving) return;
+            if (GameManager.gameSet && !GameManager.Initialized) return;
             rb.velocity = new Vector3(speed, 0, speed);
+            isMoving = true;
         };
     }
 
